@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>MILLIONER VIDEO TRANSLATOR</title>
+<style>
+:root{color-scheme:dark;--gold:#c9a45c;--bg:#101010;--panel:#1b1b1b;--muted:#a9a9a9;--ok:#5fcf80;--bad:#ff6b6b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#f5f2eb;font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:90px}
+main{max-width:760px;margin:auto;padding:24px 16px 40px}
+header{display:flex;align-items:center;gap:12px;margin:8px 0 22px}
+.logo{width:44px;height:44px;border:1px solid var(--gold);border-radius:13px;display:grid;place-items:center;color:var(--gold);font-weight:800}
+h1{font-size:18px;letter-spacing:1.4px;margin:0}header p{margin:4px 0 0;color:var(--muted);font-size:11px;letter-spacing:2px}
+h2{font-size:20px;margin:0 0 8px}h3{font-size:16px;margin:0}
+.hint{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 14px}
+input,select,textarea{width:100%;padding:14px;border-radius:13px;border:1px solid #3b3b3b;background:#191919;color:#fff;font-size:16px;outline:none;font-family:inherit}
+textarea{line-height:1.45;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+button{border:0;border-radius:13px;padding:13px 14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
+.primary{background:var(--gold);color:#17130b;width:100%;margin-top:10px}
+.secondary{background:#292929;color:#fff;border:1px solid #3b3b3b}
+.small{padding:9px 12px;font-size:13px;border-radius:10px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.row3{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:10px}
+.card{background:var(--panel);border:1px solid #2d2d2d;border-radius:18px;padding:16px;margin:14px 0}
+.player{aspect-ratio:16/9;max-width:100%;background:#080808;border-radius:13px;overflow:hidden;display:grid;place-items:center;color:#888;text-align:center;margin-top:10px}
+.player iframe,.player video{width:100%;height:100%;border:0;background:#000}
+.status{font-size:13px;color:var(--muted);line-height:1.5;margin-top:10px;word-break:break-word}
+.note{font-size:12px;color:#aaa;line-height:1.5}
+a{color:var(--gold)}.hidden{display:none!important}
+footer{color:#777;text-align:center;font-size:11px;margin-top:28px}
+label{font-size:13px;color:var(--muted)}
+.m{border-color:#33301f}
+.mh{display:flex;gap:12px;align-items:flex-start}
+.num{flex:none;width:38px;height:38px;border-radius:11px;background:var(--gold);color:#17130b;font-weight:800;display:grid;place-items:center;font-size:17px}
+.mh>div{min-width:0;flex:1}
+.tag{display:inline-block;font-size:11px;letter-spacing:.8px;color:var(--gold);border:1px solid #4a4128;border-radius:20px;padding:2px 8px;margin:6px 6px 0 0}
+.chip{display:inline-block;font-size:12px;border-radius:20px;padding:3px 9px;background:#2a2a2a;color:#bbb;margin-top:6px}
+.chip.ok{background:#17301f;color:var(--ok)}.chip.bad{background:#3a1b1b;color:var(--bad)}
+.chip.auto{background:#1f2a3a;color:#8fb8ff}
+.out{margin-top:6px}
+.marks{display:grid;grid-template-columns:1fr 1fr 70px;gap:8px;margin-top:12px}
+.marks button.ok{background:#17301f;color:var(--ok);border:1px solid #2a5a3a}
+.marks button.bad{background:#3a1b1b;color:var(--bad);border:1px solid #6a2a2a}
+.steps{list-style:none;margin:10px 0 0;padding:0;font-size:13px;line-height:1.7}
+.steps li{color:var(--muted)}.steps li.ok{color:var(--ok)}.steps li.bad{color:var(--bad)}
+.summary{font-size:14px;line-height:1.7}
+.summary b{color:var(--gold)}
+.diag{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #2d2d2d;font-size:14px}
+.diag .r{grid-column:1/-1;font-size:12px;color:var(--muted);word-break:break-word}
+.stopbar{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:#0c0c0cee;border-top:1px solid #2d2d2d;z-index:50}
+.stopbar button{width:100%;background:#7a2323;color:#fff}
+.sub{font-size:15px;color:#fff;background:#0b0b0b;border-radius:10px;padding:10px;margin-top:10px;min-height:44px}
+.links a{display:block;padding:11px 0;border-bottom:1px solid #2d2d2d;word-break:break-all}
+ul.l{margin:8px 0 0;padding-left:18px;font-size:13px;color:var(--muted);line-height:1.6}
+</style>
+</head>
+<body>
+<main>
+<header><div class="logo">M</div><div><h1>MILLIONER</h1><p>VIDEO TRANSLATOR · 20 СПОСОБОВ</p></div></header>
+
+<section class="card">
+<h2>1. Ссылка на видео</h2>
+<p class="hint">Вставь любую ссылку YouTube: из адресной строки, из кнопки «Поделиться» (можно целиком текстом), короткую youtu.be, Shorts или просто ID.</p>
+<input id="url" placeholder="https://youtu.be/... или текст из «Поделиться»" inputmode="url" autocomplete="off">
+<div class="row"><button class="secondary" id="pasteBtn">Вставить из буфера</button><button class="secondary" id="clearBtn">Очистить</button></div>
+<div id="vidInfo" class="status"></div>
+<label for="search" style="display:block;margin-top:14px">Или найди видео на YouTube</label>
+<input id="search" placeholder="Например: English documentary" autocomplete="off" style="margin-top:6px">
+<button class="secondary" id="searchBtn" style="width:100%;margin-top:10px">Найти на YouTube</button>
+<div id="historyList" class="status"></div>
+</section>
+
+<section class="card">
+<h2>2. Настройки перевода и голоса</h2>
+<div class="row3">
+<div><label for="trSel">Переводчик</label><select id="trSel"><option value="auto">Авто (по очереди)</option><option value="gtx">Google (gtx)</option><option value="lingva">Lingva</option><option value="mymemory">MyMemory</option><option value="gtxproxy">Google через прокси</option></select></div>
+<div><label for="ttsSel">Голос</label><select id="ttsSel"><option value="auto">Авто (по очереди)</option><option value="web">Голос устройства</option><option value="google">Google TTS</option><option value="se_maxim">StreamElements: Максим</option><option value="se_tatyana">StreamElements: Татьяна</option></select></div>
+<div><label for="rateSel">Скорость речи</label><select id="rateSel"><option value="0.9">0.9</option><option value="1" >1.0</option><option value="1.1" selected>1.1</option><option value="1.2">1.2</option><option value="1.35">1.35</option><option value="1.5">1.5</option></select></div>
+<div><label for="volSel">Оригинал при озвучке</label><select id="volSel"><option value="0">Выключить</option><option value="12" selected>Тихо (12%)</option><option value="35">35%</option><option value="100">Как есть</option></select></div>
+</div>
+<p class="note" style="margin-top:10px">На iPhone громкость встроенного YouTube-плеера программно не меняется: приглушай оригинал кнопками телефона или используй способы 6 и 7 (там видео без звука).</p>
+</section>
+
+<section class="card">
+<h2>3. Проверка компонентов</h2>
+<p class="hint">Каждый переводчик и каждый голос отдельно. Видишь сразу, что работает на твоём устройстве и в твоей сети.</p>
+<div id="diag"></div>
+<button class="secondary" id="diagAll" style="width:100%;margin-top:10px">Проверить всё сразу</button>
+</section>
+
+<section class="card">
+<h2>4. Итоги проверки</h2>
+<div id="summary" class="summary"></div>
+<div class="row"><button class="primary" id="autoTest" style="margin-top:10px">Автотест сетевых способов</button><button class="secondary" id="copyRep" style="margin-top:10px">Скопировать отчёт</button></div>
+<div id="autoStatus" class="status"></div>
+<p class="note">Автотест проверяет только получение данных (субтитры, потоки, загрузка плеера). Видео-плееры и голос проверь вручную в карточках: нажми «Запустить», затем «Работает» или «Не работает».</p>
+</section>
+
+<div id="methods"></div>
+
+<section class="card">
+<h2>Важно знать</h2>
+<ul class="l">
+<li>Встроенный плеер YouTube (способы 1–3) даёт ошибку 153 или «видео недоступно», если страница открыта как локальный файл. Открывай её по https-адресу (хостинг, GitHub Pages, Netlify и т.п.).</li>
+<li>Озвучка строится так: субтитры, перевод на русский, синтез речи. Оригинальную звуковую дорожку страница не подменяет.</li>
+<li>Публичные прокси и зеркала (Invidious, Piped, CORS-прокси) нестабильны: сегодня работает один, завтра другой. Поэтому способов много.</li>
+<li>Если у видео совсем нет субтитров, пробуй способ 18 (распознавание речи с микрофона) или Яндекс Браузер (способ 19).</li>
+</ul>
+</section>
+<footer>MILLIONER.UZ · версия с 20 способами</footer>
+</main>
+<div class="stopbar"><button id="stopAll">⏹ Остановить озвучку</button></div>
+
+<script>
+//<pure>
+const $=id=>document.getElementById(id);
+function parseVid(raw){
+  raw=(raw||'').trim(); if(!raw)return null;
+  const m=raw.match(/https?:\/\/[^\s]+/); const s=m?m[0]:raw;
+  if(/^[\w-]{11}$/.test(s))return s;
+  try{
+    const u=new URL(s.startsWith('http')?s:'https://'+s);
+    const h=u.hostname.replace(/^(www|m|music)\./,'');
+    if(h==='youtu.be'){const id=u.pathname.slice(1).split('/')[0];if(/^[\w-]{11}$/.test(id))return id}
+    if(h.endsWith('youtube.com')||h.endsWith('youtube-nocookie.com')){
+      const v=u.searchParams.get('v');if(v&&/^[\w-]{11}$/.test(v))return v;
+      const mm=u.pathname.match(/\/(embed|shorts|live|v)\/([\w-]{11})/);if(mm)return mm[2];
+    }
+  }catch(e){}
+  const mm=raw.match(/(?:v=|youtu\.be\/|embed\/|shorts\/|live\/)([\w-]{11})/);
+  return mm?mm[1]:null;
+}
+function dec(s){return s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#(\d+);/g,(_,n)=>String.fromCharCode(+n)).replace(/&#x([\da-f]+);/gi,(_,n)=>String.fromCharCode(parseInt(n,16))).replace(/&nbsp;/g,' ')}
+const tidy=s=>dec(String(s).replace(/<[^>]+>/g,'')).replace(/\s+/g,' ').trim();
+function parseJson3(j){return (j.events||[]).filter(e=>e.segs).map(e=>({t:(e.tStartMs||0)/1000,d:(e.dDurationMs||2000)/1000,s:tidy(e.segs.map(x=>x.utf8||'').join(''))})).filter(c=>c.s)}
+function parseXml(x){
+  const out=[];let m;
+  const r=/<text\s+start="([\d.]+)"(?:\s+dur="([\d.]+)")?[^>]*>([\s\S]*?)<\/text>/g;
+  while((m=r.exec(x)))out.push({t:+m[1],d:+(m[2]||2),s:tidy(m[3])});
+  if(!out.length){const r2=/<p\s+t="(\d+)"(?:\s+d="(\d+)")?[^>]*>([\s\S]*?)<\/p>/g;while((m=r2.exec(x)))out.push({t:m[1]/1000,d:(m[2]||2000)/1000,s:tidy(m[3])})}
+  return out.filter(c=>c.s);
+}
+function ts(s){const p=s.replace(',','.').split(':').map(parseFloat);return p.length===3?p[0]*3600+p[1]*60+p[2]:p[0]*60+p[1]}
+function parseVtt(x){
+  const out=[];
+  for(const b of x.replace(/\r/g,'').split(/\n\s*\n/)){
+    const lines=b.split('\n');const i=lines.findIndex(l=>l.includes('-->'));if(i<0)continue;
+    const mm=lines[i].match(/([\d:.,]+)\s*-->\s*([\d:.,]+)/);if(!mm)continue;
+    const t=ts(mm[1]),e=ts(mm[2]);const s=tidy(lines.slice(i+1).join(' '));
+    if(s)out.push({t,d:Math.max(e-t,.5),s});
+  }
+  return out;
+}
+function parsePlain(x){
+  if(/^\s*<(!doctype|html)/i.test(x))return [];
+  const parts=x.replace(/\r/g,'').match(/[^.!?\n]+[.!?]*/g)||[];
+  return parts.map(s=>s.trim()).filter(Boolean).map(s=>({t:null,d:0,s}));
+}
+function dedupe(c){const o=[];for(const x of c){const p=o[o.length-1];if(p&&p.s===x.s)continue;o.push(x)}return o}
+function parseAny(x){
+  x=(x||'').trim();if(!x)return [];
+  let c=[];
+  if(x[0]==='{'){try{c=parseJson3(JSON.parse(x))}catch(e){}}
+  else if(/<(transcript|timedtext)|<text\s|<p\s+t=/.test(x.slice(0,3000)))c=parseXml(x);
+  else if(x.includes('-->'))c=parseVtt(x);
+  else c=parsePlain(x);
+  return dedupe(c);
+}
+function mergeCues(cs){
+  if(!cs.length||cs[0].t==null)return cs.map(c=>({...c}));
+  const out=[];let cur=null;
+  for(const c of cs){
+    if(!cur){cur={...c};continue}
+    const gap=c.t-(cur.t+cur.d),endP=/[.!?…]$/.test(cur.s);
+    if(!endP&&cur.s.length<110&&gap<1.2){cur.s+=' '+c.s;cur.d=Math.max(cur.d,c.t+c.d-cur.t)}
+    else{out.push(cur);cur={...c}}
+  }
+  if(cur)out.push(cur);
+  return out;
+}
+function splitChunks(t,max){
+  const parts=t.match(/[^.!?;\n]+[.!?;]*\s*/g)||[t];const out=[];let cur='';
+  for(let p of parts){
+    while(p.length>max){const cut=p.lastIndexOf(' ',max)>20?p.lastIndexOf(' ',max):max;if(cur){out.push(cur);cur=''}out.push(p.slice(0,cut));p=p.slice(cut)}
+    if((cur+p).length>max){out.push(cur);cur=p}else cur+=p;
+  }
+  if(cur.trim())out.push(cur);
+  return out.map(s=>s.trim()).filter(Boolean);
+}
+function extractArr(s,key){
+  const i=s.indexOf(key);if(i<0)return null;
+  const j=s.indexOf('[',i);let d=0,k=j;
+  for(;k<s.length;k++){const ch=s[k];if(ch==='[')d++;else if(ch===']'){d--;if(!d)break}}
+  try{return JSON.parse(s.slice(j,k+1))}catch(e){return null}
+}
+const fmtT=t=>{t=Math.max(0,t|0);return Math.floor(t/60)+':'+String(t%60).padStart(2,'0')};
+//</pure>
+
+/* ---------- утилиты ---------- */
+const el=(tag,props={},...kids)=>{const e=document.createElement(tag);for(const k in props){if(k==='class')e.className=props[k];else if(k==='text')e.textContent=props[k];else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),props[k]);else e.setAttribute(k,props[k])}kids.flat().forEach(c=>{if(c!=null)e.append(c)});return e};
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function tfetch(url,opt={},ms=12000){
+  const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);
+  try{const r=await fetch(url,{...opt,signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);return r}
+  catch(e){if(e.name==='AbortError')throw new Error('таймаут');throw e}
+  finally{clearTimeout(t)}
+}
+function why(e){
+  let m=(e&&e.message)||String(e);
+  if(e&&e.errors&&e.errors.length){m=[...new Set(e.errors.map(x=>x.message||String(x)))].slice(0,3).join(' | ')}
+  if(/Failed to fetch|NetworkError|Load failed/i.test(m))m='сеть недоступна или сайт не разрешил запрос из браузера (CORS)';
+  return m;
+}
+async function mapLimit(arr,n,fn){const res=new Array(arr.length);let i=0;await Promise.all(Array.from({length:Math.min(n,arr.length)},async()=>{while(i<arr.length){const k=i++;res[k]=await fn(arr[k],k)}}));return res}
+let VID=null;
+const need=()=>{if(!VID)throw new Error('Сначала вставь ссылку YouTube (блок 1).');};
+
+/* ---------- прокси ---------- */
+const PROXIES=[
+  u=>'https://api.allorigins.win/raw?url='+encodeURIComponent(u),
+  u=>'https://corsproxy.io/?'+encodeURIComponent(u),
+  u=>'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u),
+  u=>'https://thingproxy.freeboard.io/fetch/'+u
+];
+const pfetch=(i,u)=>tfetch(PROXIES[i](u)).then(r=>r.text());
+async function anyProxy(u){let err;for(let i=0;i<PROXIES.length;i++){try{const t=await pfetch(i,u);if(t&&t.length>50)return t}catch(e){err=e}}throw err||new Error('прокси не ответили')}
+async function anyFetch(u){try{const t=await tfetch(u).then(r=>r.text());if(t&&t.trim())return t}catch(e){}return anyProxy(u)}
+
+/* ---------- источники субтитров ---------- */
+async function ttGet(fetcher){
+  const vs=[{tlang:'ru'},{tlang:'ru',kind:'asr'},{},{kind:'asr'}];
+  let lastErr;
+  for(const v of vs){
+    let u='https://www.youtube.com/api/timedtext?v='+VID+'&lang=en&fmt=json3';
+    if(v.kind)u+='&kind='+v.kind;if(v.tlang)u+='&tlang='+v.tlang;
+    try{const txt=await fetcher(u);const c=parseAny(txt);if(c.length)return{cues:c,ru:!!v.tlang}}catch(e){lastErr=e}
+  }
+  throw lastErr||new Error('YouTube вернул пустой ответ (нужна подписанная ссылка, субтитры закрыты или их нет)');
+}
+async function fromTracks(tracks,via){
+  const t=tracks.find(x=>/^en/.test(x.languageCode)&&x.kind!=='asr')||tracks.find(x=>/^en/.test(x.languageCode))||tracks[0];
+  const bu=t.baseUrl.replace(/\\u0026/g,'&');
+  for(const u of [bu+'&fmt=json3&tlang=ru',bu+'&fmt=json3',bu]){
+    try{const txt=await anyFetch(u);const c=parseAny(txt);if(c.length)return{cues:c,ru:u.includes('tlang=ru'),via}}catch(e){}
+  }
+  throw new Error('дорожка найдена, но ссылка на неё отклонена (подпись привязана к IP)');
+}
+const INV=['https://yewtu.be','https://inv.nadeko.net','https://invidious.nerdvpn.net','https://invidious.privacyredirect.com','https://iv.melmac.space'];
+const PIPED=['https://pipedapi.kavin.rocks','https://pipedapi.adminforge.de','https://api.piped.private.coffee','https://pipedapi.leptons.xyz','https://pipedapi.nosebs.ru'];
+const PC={};
+function pipedJson(){
+  if(PC[VID])return PC[VID];
+  const id=VID;
+  PC[id]=Promise.any(PIPED.map(b=>tfetch(b+'/streams/'+id,{},10000).then(r=>r.json()).then(j=>{if(j.error)throw new Error(j.message||j.error);j._base=b;return j}))).catch(e=>{delete PC[id];throw e});
+  return PC[id];
+}
+const SRC={
+  direct:()=>ttGet(u=>tfetch(u).then(r=>r.text())).then(r=>({...r,via:'timedtext напрямую'})),
+  allorigins:()=>ttGet(u=>pfetch(0,u)).then(r=>({...r,via:'timedtext + allorigins'})),
+  corsproxy:()=>ttGet(u=>pfetch(1,u)).then(r=>({...r,via:'timedtext + corsproxy.io'})),
+  codetabs:()=>ttGet(u=>pfetch(2,u)).then(r=>({...r,via:'timedtext + codetabs'})),
+  async watch(){
+    const html=await anyProxy('https://www.youtube.com/watch?v='+VID+'&hl=en&has_verified=1&bpctr=9999999999');
+    const tr=extractArr(html,'"captionTracks":');
+    if(!tr||!tr.length)throw new Error('на странице нет списка субтитров (страница согласия, ограничение региона или субтитров нет)');
+    return fromTracks(tr,'страница watch + прокси');
+  },
+  async inv(){
+    const id=VID;
+    return Promise.any(INV.map(async b=>{
+      const j=await tfetch(b+'/api/v1/captions/'+id,{},9000).then(r=>r.json());
+      const caps=j.captions||[];const c=caps.find(x=>/^en/.test(x.languageCode))||caps[0];
+      if(!c)throw new Error('нет дорожек');
+      const txt=await tfetch(b+c.url,{},12000).then(r=>r.text());
+      const cues=parseAny(txt);if(!cues.length)throw new Error('пустая дорожка');
+      return{cues,ru:false,via:'Invidious '+b.replace('https://','')};
+    }));
+  },
+  async piped(){
+    const j=await pipedJson();const subs=j.subtitles||[];
+    const s=subs.find(x=>/^en/.test(x.code)&&!x.autoGenerated)||subs.find(x=>/^en/.test(x.code))||subs[0];
+    if(!s)throw new Error('у видео нет субтитров в Piped');
+    const txt=await tfetch(s.url,{},12000).then(r=>r.text());
+    const cues=parseAny(txt);if(!cues.length)throw new Error('пустая дорожка');
+    return{cues,ru:false,via:'Piped '+j._base.replace('https://','')};
+  },
+  async innertube(){
+    const body=JSON.stringify({context:{client:{clientName:'ANDROID',clientVersion:'19.09.37',androidSdkVersion:30,hl:'en',gl:'US'}},videoId:VID,contentCheckOk:true,racyCheckOk:true});
+    const url='https://www.youtube.com/youtubei/v1/player?prettyPrint=false';
+    let j;
+    try{j=await tfetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body}).then(r=>r.json())}
+    catch(e){j=await tfetch('https://corsproxy.io/?'+encodeURIComponent(url),{method:'POST',headers:{'Content-Type':'application/json'},body}).then(r=>r.json())}
+    const tr=j&&j.captions&&j.captions.playerCaptionsTracklistRenderer&&j.captions.playerCaptionsTracklistRenderer.captionTracks;
+    if(!tr||!tr.length)throw new Error('Innertube: дорожек нет ('+((j&&j.playabilityStatus&&j.playabilityStatus.status)||'?')+')');
+    return fromTracks(tr,'Innertube ANDROID');
+  }
+};
+const AUTO_ORDER=[['piped','Piped'],['inv','Invidious'],['direct','timedtext'],['allorigins','allorigins'],['corsproxy','corsproxy.io'],['codetabs','codetabs'],['watch','страница watch'],['innertube','Innertube']];
+async function getCuesAuto(onMsg){
+  const errs=[];
+  for(const [k,name] of AUTO_ORDER){
+    onMsg&&onMsg('пробую: '+name+'…');
+    try{return await SRC[k]()}catch(e){errs.push(name+': '+why(e))}
+  }
+  throw new Error('Все источники субтитров не сработали. '+errs.join(' · '));
+}
+
+/* ---------- перевод ---------- */
+async function viaLines(t,max,fn){
+  const outs=[];let buf='';
+  for(const l of t.split('\n')){if(buf&&buf.length+l.length+1>max){outs.push(await fn(buf));buf=''}buf+=(buf?'\n':'')+l.slice(0,max)}
+  if(buf)outs.push(await fn(buf));
+  return outs.join('\n');
+}
+const gtxUrl=q=>'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ru&dt=t&q='+encodeURIComponent(q);
+const gtxJoin=j=>j[0].map(x=>x[0]).join('');
+const TR={
+  async gtx(t){
+    let r;
+    try{r=await tfetch('https://translate.googleapis.com/translate_a/single',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'client=gtx&sl=en&tl=ru&dt=t&q='+encodeURIComponent(t)})}
+    catch(e){r=await tfetch(gtxUrl(t.slice(0,1800)))}
+    return gtxJoin(await r.json());
+  },
+  lingva(t){
+    return viaLines(t,800,async b=>{
+      let err;
+      for(const base of ['https://lingva.ml','https://lingva.thedaviddelta.com','https://translate.plausibility.cloud']){
+        try{const j=await tfetch(base+'/api/v1/en/ru/'+encodeURIComponent(b),{},9000).then(r=>r.json());if(j.translation)return j.translation}catch(e){err=e}
+      }
+      throw err||new Error('Lingva недоступен');
+    });
+  },
+  mymemory(t){
+    return viaLines(t,450,async b=>{
+      const j=await tfetch('https://api.mymemory.translated.net/get?langpair='+encodeURIComponent('en|ru')+'&q='+encodeURIComponent(b)).then(r=>r.json());
+      if(String(j.responseStatus)!=='200')throw new Error(j.responseDetails||'MyMemory отказал');
+      return j.responseData.translatedText;
+    });
+  },
+  gtxproxy(t){
+    return viaLines(t,1500,async b=>{
+      let err;
+      for(let i=0;i<3;i++){try{return gtxJoin(JSON.parse(await pfetch(i,gtxUrl(b))))}catch(e){err=e}}
+      throw err;
+    });
+  }
+};
+const TRN={gtx:'Google (gtx)',lingva:'Lingva',mymemory:'MyMemory',gtxproxy:'Google через прокси'};
+let LASTTR='';
+async function tr(t){
+  const pref=$('trSel').value;
+  const order=pref==='auto'?['gtx','lingva','mymemory','gtxproxy']:[pref];
+  let err;
+  for(const k of order){try{const x=await TR[k](t);if(x&&x.trim()){LASTTR=TRN[k];return x}}catch(e){err=e}}
+  throw err||new Error('перевод не получен');
+}
+async function translateCues(cues,prog,stop){
+  const chunks=[];let cur=[],len=0;
+  for(const c of cues){if(len+c.s.length>1500&&cur.length){chunks.push(cur);cur=[];len=0}cur.push(c);len+=c.s.length+1}
+  if(cur.length)chunks.push(cur);
+  let done=0;
+  for(const ch of chunks){
+    if(stop&&stop())return;
+    const lines=ch.map(c=>c.s.replace(/\n/g,' '));
+    let parts=null;
+    try{const p=(await tr(lines.join('\n'))).split('\n');if(p.length===lines.length)parts=p}catch(e){}
+    if(!parts){
+      let fails=0;
+      parts=await mapLimit(lines,4,l=>tr(l).catch(()=>{fails++;return ''}));
+      if(fails===lines.length)throw new Error('ни один переводчик не ответил');
+    }
+    ch.forEach((c,i)=>{c.ru=(parts[i]||'').trim()});
+    done+=ch.length;prog(done,cues.length);
+  }
+}
+
+/* ---------- озвучка ---------- */
+const SILENT='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAABErAAABAAgAZGF0YQAAAAA=';
+const AUD=new Audio();AUD.preload='auto';
+let TOK=0,DUBTOK=0;const STOPFNS=[];
+function unlock(){
+  try{AUD.src=SILENT;const p=AUD.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}
+  try{if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}}catch(e){}
+}
+function stopAll(){
+  TOK++;DUBTOK++;
+  try{speechSynthesis.cancel()}catch(e){}
+  try{AUD.pause()}catch(e){}
+  while(STOPFNS.length){try{STOPFNS.pop()()}catch(e){}}
+}
+let VOICES=[];
+function loadVoices(){try{VOICES=speechSynthesis.getVoices()||[]}catch(e){}}
+if('speechSynthesis' in window){loadVoices();try{speechSynthesis.onvoiceschanged=loadVoices}catch(e){}}
+function ruVoice(){const r=VOICES.filter(v=>/^ru/i.test(v.lang));return r.find(v=>/milena|yuri|katya|pavel|svetlana|dmitry|irina/i.test(v.name))||r[0]}
+function speakWeb(t){
+  return new Promise((res,rej)=>{
+    if(!('speechSynthesis' in window))return rej(new Error('Web Speech не поддерживается этим браузером'));
+    loadVoices();const v=ruVoice();
+    if(!v&&VOICES.length)return rej(new Error('на устройстве нет русского голоса (iPhone: Настройки → Универсальный доступ → Устный контент → Голоса → Русский)'));
+    const u=new SpeechSynthesisUtterance(t);u.lang='ru-RU';if(v)u.voice=v;u.rate=+$('rateSel').value;
+    let started=false;
+    const to=setTimeout(()=>{if(!started){try{speechSynthesis.cancel()}catch(e){}rej(new Error('голос устройства не запустился'))}},7000);
+    u.onstart=()=>{started=true;clearTimeout(to)};
+    u.onend=()=>{clearTimeout(to);res()};
+    u.onerror=e=>{clearTimeout(to);(e.error==='interrupted'||e.error==='canceled')?res():rej(new Error('Web Speech: '+e.error))};
+    speechSynthesis.speak(u);
+  });
+}
+function ttsUrl(k,t){
+  const q=encodeURIComponent(t);
+  if(k==='google')return 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ru&q='+q;
+  return 'https://api.streamelements.com/kappa/v2/speech?voice='+(k==='se_maxim'?'Maxim':'Tatyana')+'&text='+q;
+}
+function speakUrl(u){
+  return new Promise((res,rej)=>{
+    let done=false,to;
+    const fin=(f,x)=>{if(done)return;done=true;clearTimeout(to);f(x)};
+    to=setTimeout(()=>fin(rej,new Error('аудио не загрузилось (таймаут)')),15000);
+    AUD.onended=()=>fin(res);
+    AUD.onerror=()=>fin(rej,new Error('аудио-сервис недоступен или отклонил запрос'));
+    AUD.onplaying=()=>clearTimeout(to);
+    AUD.defaultPlaybackRate=Math.min(+$('rateSel').value,1.5);
+    AUD.src=u;
+    const p=AUD.play();if(p&&p.catch)p.catch(e=>fin(rej,e));
+  });
+}
+const TTSN={web:'голос устройства',google:'Google TTS',se_maxim:'StreamElements Максим',se_tatyana:'StreamElements Татьяна'};
+let LASTENG='';
+async function speakOne(ch,tok){
+  const pref=$('ttsSel').value;
+  const order=pref==='auto'?['web','google','se_maxim','se_tatyana']:[pref];
+  let err;
+  for(const k of order){
+    if(tok!==TOK)return;
+    try{await(k==='web'?speakWeb(ch):speakUrl(ttsUrl(k,ch)));LASTENG=TTSN[k];return}catch(e){err=e}
+  }
+  throw err||new Error('нет доступного голоса');
+}
+async function speakLong(text,tok){
+  for(const ch of splitChunks(text,180)){if(tok!==TOK)return;await speakOne(ch,tok)}
+}
+function startDub(cues,timeFn,statusEl,duck){
+  const my=++DUBTOK;const tok=++TOK;let busy=false,ducked=false,lastT=0;
+  const iv=setInterval(async()=>{
+    if(my!==DUBTOK){clearInterval(iv);return}
+    if(busy)return;
+    let t;try{t=timeFn()}catch(e){return}
+    if(t==null||isNaN(t))return;
+    if(t<lastT-3)cues.forEach(c=>{c.sp=null});
+    lastT=t;
+    const c=cues.find(c=>c.sp!==my&&c.t<=t&&t<c.t+Math.max(c.d,2)+4);
+    if(!c||!c.ru)return;
+    c.sp=my;busy=true;
+    if(duck&&!ducked){ducked=true;try{duck()}catch(e){}}
+    statusEl.textContent='🔊 '+fmtT(t)+' · '+c.ru;
+    try{await speakLong(c.ru,tok)}catch(e){statusEl.textContent='Ошибка озвучки: '+why(e)}
+    busy=false;
+  },250);
+  STOPFNS.push(()=>clearInterval(iv));
+}
+
+/* ---------- YouTube IFrame API ---------- */
+const YTERR={2:'неверный ID видео',5:'ошибка HTML5-плеера',100:'видео не найдено или закрыто',101:'владелец запретил встраивание',150:'владелец запретил встраивание',153:'ошибка 153: страница открыта без https-адреса/Referer (локальный файл). Размести страницу на https-хостинге'};
+let ytReady=null;
+function loadYT(){
+  if(ytReady)return ytReady;
+  ytReady=new Promise((res,rej)=>{
+    if(window.YT&&window.YT.Player)return res();
+    const s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';
+    s.onerror=()=>{ytReady=null;rej(new Error('iframe_api не загрузился (YouTube заблокирован или нет сети)'))};
+    window.onYouTubeIframeAPIReady=res;document.head.append(s);
+    setTimeout(()=>{if(!(window.YT&&window.YT.Player)){ytReady=null;rej(new Error('таймаут iframe_api'))}},12000);
+  });
+  return ytReady;
+}
+function mkYT(host,onErr,onReady){
+  const o={player:null};
+  loadYT().then(()=>{
+    const pv={playsinline:1,rel:0,hl:'ru',cc_lang_pref:'ru',cc_load_policy:0};
+    if(/^https?:/.test(location.protocol))pv.origin=location.origin;
+    o.player=new YT.Player(host,{videoId:VID,width:'100%',height:'100%',playerVars:pv,events:{onReady:()=>onReady&&onReady(),onError:e=>onErr&&onErr(YTERR[e.data]||('код '+e.data))}});
+  }).catch(e=>onErr&&onErr(why(e)));
+  return o;
+}
+
+/* ---------- интерфейс результата ---------- */
+function stepsUI(host,names){
+  const ul=el('ul',{class:'steps'});const lis=names.map(n=>{const li=el('li',{text:'○ '+n});ul.append(li);return li});
+  host.append(ul);
+  return{
+    set:(i,t)=>{lis[i].className='';lis[i].textContent='… '+names[i]+': '+t},
+    ok:(i,t)=>{lis[i].className='ok';lis[i].textContent='✓ '+names[i]+(t?': '+t:'')},
+    bad:(i,t)=>{lis[i].className='bad';lis[i].textContent='✗ '+names[i]+(t?': '+t:'')}
+  };
+}
+function clockUI(parent,onStart){
+  const st={run:false,t0:0,off:0};
+  const get=()=>st.run?(performance.now()-st.t0)/1000+st.off:st.off;
+  const disp=el('span',{class:'note',text:'0:00'});
+  const jump=el('input',{placeholder:'мм:сс',style:'width:90px;padding:9px;font-size:14px'});
+  const tick=setInterval(()=>{disp.textContent=fmtT(get())},500);STOPFNS.push(()=>clearInterval(tick));
+  const setOff=v=>{const g=get();st.off=Math.max(0,v);if(st.run)st.t0=performance.now();else st.off=Math.max(0,v);disp.textContent=fmtT(get())};
+  const bar=el('div',{class:'row3'},
+    el('button',{class:'secondary small',text:'▶ Старт часов',onclick:()=>{unlock();if(!st.run){st.run=true;st.t0=performance.now()}onStart&&onStart(get)}}),
+    el('button',{class:'secondary small',text:'⏸ Пауза',onclick:()=>{if(st.run){st.off=get();st.run=false}}}),
+    el('button',{class:'secondary small',text:'−5 с',onclick:()=>{const g=get();st.off=Math.max(0,g-5);if(st.run)st.t0=performance.now()}}),
+    el('button',{class:'secondary small',text:'+5 с',onclick:()=>{const g=get();st.off=g+5;if(st.run)st.t0=performance.now()}}),
+    el('div',{},jump),
+    el('button',{class:'secondary small',text:'Перейти',onclick:()=>{const p=jump.value.split(':').map(Number);if(p.every(x=>!isNaN(x))){const v=p.length===2?p[0]*60+p[1]:p[0];st.off=v;if(st.run)st.t0=performance.now()}}})
+  );
+  parent.append(el('div',{class:'note',text:'Часы: нажми «Старт часов» ровно в момент, когда запустил видео. Подгони «−5/+5 с» или «Перейти», если голос отстаёт или спешит.'}),bar,el('div',{class:'note'},'Время часов: ',disp));
+  return get;
+}
+function renderResult(box,res,opts={}){
+  box.innerHTML='';
+  let cues=res.cues;const timed=cues.length&&cues[0].t!=null;
+  cues=timed?mergeCues(cues):cues.map(c=>({...c}));
+  if(res.ru)cues.forEach(c=>{c.ru=c.s});
+  const info=el('div',{class:'status',text:'Источник: '+(res.via||'—')+' · реплик: '+cues.length+(res.ru?' · уже на русском (автоперевод YouTube)':'')+(timed?'':' · без таймкодов')});
+  const prog=el('div',{class:'status'});
+  const ta=el('textarea',{rows:'7',placeholder:'Русский текст появится здесь…'});
+  const nowEl=el('div',{class:'sub',text:'Здесь будет текущая русская реплика'});
+  const refresh=()=>{ta.value=cues.map(c=>c.ru||'').filter(Boolean).join('\n')};
+  let stopped=false;STOPFNS.push(()=>{});
+  const tools=el('div',{class:'row'});
+  const bSeq=el('button',{class:'primary',style:'margin-top:0',text:'▶ Озвучить весь текст подряд',onclick:async()=>{
+    unlock();stopAll();const tok=++TOK;
+    try{nowEl.textContent='🔊 читаю…';await speakLong(ta.value||cues.map(c=>c.ru||'').join(' '),tok);if(tok===TOK)nowEl.textContent='Готово · голос: '+LASTENG}catch(e){nowEl.textContent='Ошибка озвучки: '+why(e)}
+  }});
+  const bStop=el('button',{class:'secondary',text:'⏹ Стоп',onclick:stopAll});
+  tools.append(bSeq,bStop);
+  box.append(info,prog,el('label',{},'Русский перевод (можно править)'),ta,tools,nowEl);
+  const duck=opts.duck||null;
+  if(timed){
+    if(opts.timeFn){
+      const go=()=>startDub(cues,opts.timeFn,nowEl,duck);
+      if(opts.auto)go();
+      box.append(el('button',{class:'secondary',style:'width:100%;margin-top:10px',text:'▶ Включить озвучку по таймингам видео',onclick:()=>{unlock();go()}}));
+    }else{
+      const clockHost=el('div',{class:'card',style:'margin:12px 0 0'});
+      clockHost.append(el('h3',{text:'Озвучка по таймингам (для любого плеера)'}));
+      clockUI(clockHost,get=>{startDub(cues,get,nowEl,null)});
+      box.append(clockHost);
+      const ytBox=el('div');
+      box.append(el('button',{class:'secondary',style:'width:100%;margin-top:10px',text:'Открыть YouTube-плеер рядом (авто-синхронизация)',onclick:()=>{
+        unlock();ytBox.innerHTML='';const pd=el('div',{class:'player'});const inner=el('div');pd.append(inner);ytBox.append(pd);
+        const st=el('div',{class:'status'});ytBox.append(st);
+        const o=mkYT(inner,m=>{st.textContent='Плеер: '+m},()=>st.textContent='Плеер готов, жми ▶ в нём');
+        startDub(cues,()=>o.player&&o.player.getCurrentTime&&o.player.getPlayerState&&o.player.getPlayerState()===1?o.player.getCurrentTime():null,nowEl,()=>{try{o.player.setVolume(+$('volSel').value)}catch(e){}});
+      }}),ytBox);
+    }
+  }
+  if(!res.ru){
+    prog.textContent='Перевожу…';
+    let first=true;
+    translateCues(cues,(d,n)=>{refresh();prog.textContent='Перевод: '+d+' из '+n+' · '+LASTTR;if(first){first=false;opts.onFirst&&opts.onFirst()}},()=>stopped).then(()=>{prog.textContent='Перевод готов · '+LASTTR;refresh();opts.onDone&&opts.onDone()}).catch(e=>{prog.textContent='Ошибка перевода: '+why(e)});
+  }else{refresh();prog.textContent='Перевод не нужен (русские субтитры от YouTube)';opts.onFirst&&opts.onFirst();opts.onDone&&opts.onDone()}
+  return{cues};
+}
+function fail(out,e,extra){
+  out.innerHTML='';
+  out.append(el('div',{class:'status',style:'color:var(--bad)',text:'✗ '+why(e)}));
+  if(extra)out.append(el('div',{class:'note',text:extra}));
+}
+
+/* ---------- способы ---------- */
+function frameBox(src){
+  const p=el('div',{class:'player'});
+  p.append(el('iframe',{src,allow:'autoplay; encrypted-media; picture-in-picture; fullscreen',allowfullscreen:'',referrerpolicy:'strict-origin-when-cross-origin',loading:'lazy'}));
+  return p;
+}
+function withDubTools(out,intro){
+  const box=el('div');
+  out.append(el('div',{class:'note',style:'margin-top:10px',text:intro||'Ниже можно добавить русский голос к этому плееру.'}),
+    el('button',{class:'secondary',style:'width:100%;margin-top:8px',text:'Подготовить русскую озвучку (авто-поиск субтитров)',onclick:async()=>{
+      unlock();box.innerHTML='';const st=el('div',{class:'status',text:'Ищу субтитры…'});box.append(st);
+      try{const res=await getCuesAuto(m=>{st.textContent=m});renderResult(box,res)}catch(e){fail(box,e,'Совет: открой способ 16 и вставь расшифровку вручную.')}
+    }}),box);
+}
+function embedMethod(urlFn,opts={}){
+  return out=>{
+    need();out.innerHTML='';
+    if(opts.select){
+      const sel=el('select',{id:'sel_'+opts.id,style:'margin-top:10px'});opts.select.forEach(b=>sel.append(el('option',{value:b,text:b.replace('https://','')})));
+      out.append(el('label',{},'Зеркало'),sel);
+      const holder=el('div');out.append(holder);
+      const draw=()=>{holder.innerHTML='';holder.append(frameBox(urlFn(sel.value)))};
+      sel.addEventListener('change',draw);draw();
+    }else out.append(frameBox(urlFn()));
+    if(location.protocol==='file:')out.append(el('div',{class:'note',style:'color:var(--bad)',text:'Страница открыта как файл: YouTube покажет ошибку 153. Нужен https-адрес.'}));
+    out.append(el('div',{class:'note',text:opts.hint||''}));
+    withDubTools(out,'Видео играет в плеере выше. Русский голос идёт отдельно, синхронизируется часами.');
+  };
+}
+const M={};
+M[1]=async out=>{
+  need();out.innerHTML='';
+  const st=stepsUI(out,['Плеер YouTube','Субтитры','Перевод','Озвучка']);
+  const pbox=el('div',{class:'player'});const inner=el('div');pbox.append(inner);out.append(pbox);
+  if(location.protocol==='file:')out.append(el('div',{class:'note',style:'color:var(--bad)',text:'Страница открыта как файл: плеер покажет ошибку 153. Нужен https-адрес.'}));
+  const box=el('div');out.append(box);
+  st.set(0,'загружаю…');
+  const o=mkYT(inner,m=>st.bad(0,m),()=>st.ok(0,'готов, нажми ▶ в плеере'));
+  try{
+    const res=await getCuesAuto(m=>st.set(1,m));
+    st.ok(1,res.via+' · '+res.cues.length);
+    st.set(2,'старт…');
+    renderResult(box,res,{
+      auto:true,
+      timeFn:()=>o.player&&o.player.getPlayerState&&o.player.getPlayerState()===1?o.player.getCurrentTime():null,
+      duck:()=>{try{o.player.setVolume(+$('volSel').value)}catch(e){}},
+      onFirst:()=>{st.ok(2,'идёт');st.set(3,'ждёт запуска видео')},
+      onDone:()=>st.ok(2,'готов')
+    });
+  }catch(e){st.bad(1,why(e));out.append(el('div',{class:'note',text:'Плеер всё равно работает. Для озвучки используй способы 6–17.'}))}
+};
+M[2]=embedMethod(()=>'https://www.youtube-nocookie.com/embed/'+VID+'?playsinline=1&rel=0&hl=ru&cc_lang_pref=ru&cc_load_policy=1',{hint:'В плеере: ⚙ → Субтитры → Автоперевод → Русский (если автор разрешил).'});
+M[3]=embedMethod(()=>'https://www.youtube.com/embed/'+VID+'?playsinline=1&rel=0&hl=ru&cc_lang_pref=ru&cc_load_policy=1',{hint:'Обычный embed-плеер YouTube с русским интерфейсом.'});
+M[4]=embedMethod(b=>b+'/embed/'+VID+'?autoplay=0&hl=ru',{id:4,select:INV,hint:'Зеркало Invidious: чужой сервер, часть зеркал не работает. Меняй в списке.'});
+M[5]=embedMethod(b=>b+'/embed/'+VID,{id:5,select:['https://piped.video','https://piped.private.coffee','https://piped.adminforge.de','https://piped.kavin.rocks'],hint:'Фронтенд Piped: чужой сервер, часть зеркал не работает. Меняй в списке.'});
+async function tryVideo(v,urls){
+  let err;
+  for(const u of urls){
+    try{
+      await new Promise((res,rej)=>{const to=setTimeout(()=>rej(new Error('таймаут загрузки видео')),12000);v.onloadedmetadata=()=>{clearTimeout(to);res()};v.onerror=()=>{clearTimeout(to);rej(new Error('видео-поток не открылся'))};v.src=u;v.load()});
+      return u;
+    }catch(e){err=e}
+  }
+  throw err||new Error('нет потоков');
+}
+async function streamMethod(out,getStreams,getCues,label){
+  need();out.innerHTML='';
+  const st=stepsUI(out,['Видео-поток','Субтитры','Перевод','Озвучка']);
+  const pbox=el('div',{class:'player'});const v=el('video',{controls:'',playsinline:'',preload:'metadata'});pbox.append(v);out.append(pbox);
+  const box=el('div');out.append(box);
+  v.addEventListener('play',unlock);
+  const applyVol=()=>{const p=+$('volSel').value;v.muted=p===0;try{v.volume=p/100}catch(e){}};
+  const vp=(async()=>{st.set(0,'ищу поток…');const urls=await getStreams();st.set(0,'открываю…');await tryVideo(v,urls);st.ok(0,label);applyVol()})().catch(e=>{st.bad(0,why(e))});
+  try{
+    st.set(1,'ищу…');
+    const res=await getCues();
+    st.ok(1,res.via+' · '+res.cues.length);
+    renderResult(box,res,{auto:true,timeFn:()=>v.paused?null:v.currentTime,duck:applyVol,onFirst:()=>{st.ok(2,'идёт');st.set(3,'ждёт запуска видео')},onDone:()=>st.ok(2,'готов')});
+  }catch(e){st.bad(1,why(e))}
+  await vp;
+};
+M[6]=out=>streamMethod(out,async()=>{
+  const j=await pipedJson();
+  const mux=(j.videoStreams||[]).filter(s=>!s.videoOnly&&/mp4/.test(s.mimeType||''));
+  const urls=[];mux.forEach(s=>urls.push(s.url));if(j.hls)urls.push(j.hls);
+  (j.videoStreams||[]).filter(s=>/mp4/.test(s.mimeType||'')&&s.videoOnly).forEach(s=>urls.push(s.url));
+  if(!urls.length)throw new Error('Piped не отдал потоки');
+  return urls;
+},async()=>{try{return await SRC.piped()}catch(e){return getCuesAuto(()=>{})}},'Piped (поток через зеркало)');
+M[7]=out=>streamMethod(out,async()=>INV.map(b=>b+'/latest_version?id='+VID+'&itag=18&local=true'),async()=>{try{return await SRC.inv()}catch(e){return getCuesAuto(()=>{})}},'Invidious (поток через зеркало)');
+const runSrc=key=>async out=>{
+  need();unlock();out.innerHTML='';const st=el('div',{class:'status',text:'Загружаю субтитры…'});out.append(st);
+  try{const res=await SRC[key]();const box=el('div');out.innerHTML='';out.append(box);renderResult(box,res)}
+  catch(e){fail(out,e,'Этот источник сейчас не сработал. Попробуй соседние способы или ручную вставку (16).')}
+};
+M[8]=runSrc('direct');M[9]=runSrc('allorigins');M[10]=runSrc('corsproxy');M[11]=runSrc('codetabs');
+M[12]=runSrc('watch');M[13]=runSrc('inv');M[14]=runSrc('piped');M[15]=runSrc('innertube');
+M[16]=out=>{
+  out.innerHTML='';
+  const ta=el('textarea',{id:'manualTa',rows:'7',placeholder:'Вставь английские субтитры, расшифровку (YouTube: описание → «Показать расшифровку») или текст SRT/VTT…'});
+  const box=el('div');
+  out.append(ta,el('button',{class:'primary',text:'Перевести и озвучить',onclick:()=>{
+    unlock();const c=parseAny(ta.value);
+    if(!c.length){fail(box,new Error('Вставь текст субтитров'));return}
+    renderResult(box,{cues:c,ru:false,via:'ручная вставка'});
+  }}),box);
+};
+M[17]=out=>{
+  out.innerHTML='';
+  const box=el('div');
+  const inp=el('input',{type:'file',id:'fileIn',accept:'.srt,.vtt,.txt,.json,.json3,.xml,.ttml,text/*'});
+  inp.addEventListener('change',()=>{
+    const f=inp.files[0];if(!f)return;unlock();
+    const r=new FileReader();r.onload=()=>{const c=parseAny(String(r.result));c.length?renderResult(box,{cues:c,ru:false,via:'файл '+f.name}):fail(box,new Error('в файле не нашлось субтитров'))};
+    r.onerror=()=>fail(box,new Error('файл не прочитался'));r.readAsText(f);
+  });
+  out.append(el('div',{class:'note',text:'Файл субтитров (.srt, .vtt, .txt), скачанный с любого сайта или из приложения.'}),inp,box);
+};
+M[18]=out=>{
+  out.innerHTML='';
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){out.append(el('div',{class:'status',style:'color:var(--bad)',text:'✗ Этот браузер не поддерживает распознавание речи (SpeechRecognition).'}));return}
+  const log=el('div',{class:'sub',text:'Нажми «Слушать», включи английское видео на другом устройстве (или громко), и голос переведёт речь на лету.'});
+  let rec=null,running=false,queue=Promise.resolve();
+  const stop=()=>{running=false;try{rec&&rec.stop()}catch(e){}};
+  const btn=el('button',{class:'primary',text:'🎤 Слушать и переводить',onclick:()=>{
+    unlock();stopAll();if(running)return;running=true;STOPFNS.push(stop);const tok=++TOK;
+    rec=new SR();rec.lang='en-US';rec.continuous=true;rec.interimResults=false;
+    rec.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++){if(!e.results[i].isFinal)continue;const en=e.results[i][0].transcript.trim();if(!en)continue;
+      tr(en).then(ru=>{log.textContent='EN: '+en+'\nRU: '+ru;queue=queue.then(()=>speakLong(ru,tok)).catch(()=>{})}).catch(err=>{log.textContent='Ошибка перевода: '+why(err)})}};
+    rec.onerror=e=>{log.textContent='Ошибка микрофона: '+e.error+(e.error==='not-allowed'?' (разреши доступ к микрофону; нужен https)':'')};
+    rec.onend=()=>{if(running){try{rec.start()}catch(e){}}};
+    try{rec.start();log.textContent='Слушаю…'}catch(e){log.textContent='Не удалось запустить: '+why(e)}
+  }});
+  log.style.whiteSpace='pre-wrap';
+  out.append(btn,log,el('div',{class:'note',text:'Микрофон слышит и русский голос тоже. Лучше слушать видео с другого устройства, а русскую озвучку брать в наушники.'}));
+};
+M[19]=out=>{
+  need();out.innerHTML='';
+  const w='https://www.youtube.com/watch?v='+VID;
+  const L=[
+    ['YouTube с русским интерфейсом',w+'&hl=ru','В плеере: ⚙ → Аудиодорожка → Русский (автодубляж есть не у всех видео) или Субтитры → Автоперевод → Русский.'],
+    ['Приложение YouTube','youtube://www.youtube.com/watch?v='+VID,'Откроет приложение, если оно установлено.'],
+    ['Яндекс Браузер (перевод видео со звуком)','yandexbrowser-open-url://'+encodeURIComponent(w),'Яндекс Браузер сам озвучивает видео по-русски кнопкой «Перевести видео». Нужен установленный Яндекс Браузер.'],
+    ['Мобильная версия YouTube','https://m.youtube.com/watch?v='+VID,'Если в обычной версии нет нужной кнопки.']
+  ];
+  const w2=el('div',{class:'links'});
+  L.forEach(([t,h,d])=>w2.append(el('a',{href:h,target:'_blank',rel:'noopener noreferrer'},t),el('div',{class:'note',text:d})));
+  out.append(w2);
+};
+M[20]=out=>{
+  need();out.innerHTML='';
+  const w='https://www.youtube.com/watch?v='+VID,e=encodeURIComponent(w);
+  const L=[
+    ['downsub.com — скачать субтитры','https://downsub.com/?url='+e],
+    ['youtubetotranscript.com — расшифровка','https://youtubetotranscript.com/transcript?v='+VID],
+    ['savesubs.com — субтитры','https://savesubs.com/'],
+    ['Google Translate: страница видео на русском','https://translate.google.com/translate?sl=en&tl=ru&u='+e]
+  ];
+  const w2=el('div',{class:'links'});
+  L.forEach(([t,h])=>w2.append(el('a',{href:h,target:'_blank',rel:'noopener noreferrer'},t)));
+  out.append(w2,el('div',{class:'note',text:'Скопируй расшифровку на сайте и вставь в способ 16: там перевод и русский голос. Запасной вариант на iPhone: выдели русский текст и включи «Устный контент → Читать экран».'}),
+    el('button',{class:'secondary small',style:'margin-top:8px',text:'Скопировать ссылку на видео',onclick:()=>{try{navigator.clipboard.writeText(w)}catch(e){}}}));
+};
+
+const METHODS=[
+ {n:1,cat:'Плеер + голос',title:'YouTube-плеер (IFrame API) + авто-озвучка по таймингам',desc:'Главный способ: официальный плеер, субтитры ищутся по цепочке из 8 источников, перевод и русский голос идут синхронно с видео.',probe:async()=>{await loadYT();return 'iframe_api загружен'}},
+ {n:2,cat:'Плеер',title:'youtube-nocookie embed + русские субтитры',desc:'Встраиваемый плеер с параметрами русского языка и озвучкой по часам.'},
+ {n:3,cat:'Плеер',title:'Обычный embed YouTube + русский интерфейс',desc:'Классический iframe, плюс озвучка по часам.'},
+ {n:4,cat:'Плеер',title:'Зеркало Invidious (embed)',desc:'Плеер через открытый сервер Invidious, часто работает там, где YouTube-плеер даёт ошибку.'},
+ {n:5,cat:'Плеер',title:'Зеркало Piped (embed)',desc:'Плеер через открытый фронтенд Piped.'},
+ {n:6,cat:'Плеер + голос',title:'Видео-поток Piped в нативном <video> + озвучка',desc:'Видео играет в обычном видео-элементе без YouTube-плеера, время считывается точно.',probe:async()=>{const j=await pipedJson();return 'потоки: '+((j.videoStreams||[]).length)}},
+ {n:7,cat:'Плеер + голос',title:'Видео-поток Invidious в <video> + озвучка',desc:'То же самое через зеркало Invidious (itag 18, 360p).'},
+ {n:8,cat:'Субтитры',title:'YouTube timedtext напрямую (с автопереводом tlang=ru)',desc:'Самый быстрый путь, браузеры часто блокируют его политикой CORS.',probe:()=>SRC.direct().then(r=>r.cues.length+' реплик')},
+ {n:9,cat:'Субтитры',title:'timedtext через прокси allorigins',desc:'Тот же запрос, но обёрнутый в публичный CORS-прокси.',probe:()=>SRC.allorigins().then(r=>r.cues.length+' реплик')},
+ {n:10,cat:'Субтитры',title:'timedtext через прокси corsproxy.io',desc:'Другой публичный прокси.',probe:()=>SRC.corsproxy().then(r=>r.cues.length+' реплик')},
+ {n:11,cat:'Субтитры',title:'timedtext через прокси codetabs',desc:'Третий прокси на случай, если два других не отвечают.',probe:()=>SRC.codetabs().then(r=>r.cues.length+' реплик')},
+ {n:12,cat:'Субтитры',title:'Страница watch → список дорожек (captionTracks)',desc:'Скачиваем HTML страницы видео через прокси и достаём ссылки на субтитры.',probe:()=>SRC.watch().then(r=>r.cues.length+' реплик')},
+ {n:13,cat:'Субтитры',title:'Invidious API: /api/v1/captions',desc:'Опрашивает 5 зеркал одновременно, берёт первый ответ.',probe:()=>SRC.inv().then(r=>r.cues.length+' реплик')},
+ {n:14,cat:'Субтитры',title:'Piped API: /streams',desc:'Опрашивает 5 зеркал Piped и берёт субтитры из ответа.',probe:()=>SRC.piped().then(r=>r.cues.length+' реплик')},
+ {n:15,cat:'Субтитры',title:'Innertube API (клиент ANDROID)',desc:'Служебный запрос плеера YouTube, как делает мобильное приложение.',probe:()=>SRC.innertube().then(r=>r.cues.length+' реплик')},
+ {n:16,cat:'Ручной',title:'Вставка текста субтитров → перевод → голос',desc:'Работает всегда, если у тебя есть текст. Понимает обычный текст, SRT и VTT.'},
+ {n:17,cat:'Ручной',title:'Загрузка файла субтитров → перевод → голос',desc:'Выбери файл .srt, .vtt или .txt с устройства.'},
+ {n:18,cat:'Живой перевод',title:'Распознавание речи с микрофона → перевод → голос',desc:'Для видео без субтитров: слушает английскую речь и озвучивает перевод.'},
+ {n:19,cat:'Встроенное',title:'Яндекс Браузер, приложение YouTube, автодубляж',desc:'Ссылки в программы, которые умеют переводить и озвучивать видео сами.'},
+ {n:20,cat:'Встроенное',title:'Сайты расшифровок и Google Translate',desc:'Достаём текст на сторонних сайтах и несём в способ 16.'}
+];
+
+/* ---------- состояние и сводка ---------- */
+let RES=store.get('mvt_res',{});const AUTO={};
+function chipFor(n){
+  const r=RES[n],a=AUTO[n];
+  if(r==='ok')return['chip ok','✓ Работает (ты отметил)'];
+  if(r==='bad')return['chip bad','✗ Не работает (ты отметил)'];
+  if(a)return['chip auto','автотест: '+a];
+  return['chip','не проверен'];
+}
+function paint(){
+  METHODS.forEach(m=>{const c=$('chip'+m.n);if(!c)return;const[cl,tx]=chipFor(m.n);c.className=cl;c.textContent=tx});
+  const ok=METHODS.filter(m=>RES[m.n]==='ok').map(m=>m.n),bad=METHODS.filter(m=>RES[m.n]==='bad').map(m=>m.n);
+  const rest=METHODS.filter(m=>!RES[m.n]).map(m=>m.n);
+  const auto=METHODS.filter(m=>AUTO[m.n]&&AUTO[m.n].startsWith('✓')).map(m=>m.n);
+  $('summary').innerHTML='<b>Работают:</b> '+(ok.join(', ')||'—')+'<br><b>Не работают:</b> '+(bad.join(', ')||'—')+'<br><b>Не проверены:</b> '+(rest.join(', ')||'—')+'<br><b>Автотест прошёл:</b> '+(auto.join(', ')||'—');
+}
+function buildCards(){
+  const host=$('methods');
+  METHODS.forEach(m=>{
+    const out=el('div',{class:'out',id:'out'+m.n});
+    const chip=el('span',{class:'chip',id:'chip'+m.n,text:'не проверен'});
+    const run=el('button',{class:'primary',text:'Запустить способ '+m.n,onclick:async()=>{
+      unlock();stopAll();
+      try{await M[m.n](out)}catch(e){fail(out,e)}
+    }});
+    const set=v=>()=>{RES[m.n]=v;store.set('mvt_res',RES);paint()};
+    const marks=el('div',{class:'marks'},
+      el('button',{class:'ok small',text:'✓ Работает',onclick:set('ok')}),
+      el('button',{class:'bad small',text:'✗ Не работает',onclick:set('bad')}),
+      el('button',{class:'secondary small',text:'Сброс',onclick:()=>{delete RES[m.n];store.set('mvt_res',RES);paint()}}));
+    host.append(el('section',{class:'card m'},
+      el('div',{class:'mh'},el('div',{class:'num',text:String(m.n)}),el('div',{},el('h3',{text:m.title}),el('span',{class:'tag',text:m.cat}),el('div',{},chip),el('p',{class:'hint',style:'margin:8px 0 0',text:m.desc}))),
+      run,out,marks));
+  });
+  paint();
+}
+function setVid(raw){
+  const id=parseVid(raw);VID=id;
+  const info=$('vidInfo');info.innerHTML='';
+  if(id){info.append(el('div',{style:'display:flex;gap:10px;align-items:center'},el('img',{src:'https://i.ytimg.com/vi/'+id+'/mqdefault.jpg',alt:'',style:'width:96px;border-radius:8px'}),el('div',{text:'Видео распознано: '+id})));
+    const h=store.get('millioner_video_history',[]).filter(x=>x.id!==id);h.unshift({id,raw:'https://youtu.be/'+id,when:Date.now()});store.set('millioner_video_history',h.slice(0,8));renderHistory()}
+  else if(raw&&raw.trim())info.textContent='Не удалось распознать ссылку YouTube.';
+  return id;
+}
+function renderHistory(){
+  const items=store.get('millioner_video_history',[]),host=$('historyList');host.innerHTML='';
+  if(!items.length)return;
+  host.append(el('div',{text:'Недавние:',style:'margin-top:10px'}));
+  items.forEach(it=>host.append(el('div',{style:'display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #333'},el('div',{style:'flex:1;min-width:0',text:'YouTube · '+it.id}),el('button',{class:'secondary small',text:'Выбрать',onclick:()=>{$('url').value=it.raw;setVid(it.raw)}}))));
+  host.append(el('button',{class:'secondary small',style:'margin-top:8px',text:'Очистить историю',onclick:()=>{try{localStorage.removeItem('millioner_video_history')}catch(e){}renderHistory()}}));
+}
+$('url').addEventListener('input',e=>setVid(e.target.value));
+$('url').addEventListener('change',e=>setVid(e.target.value));
+$('pasteBtn').addEventListener('click',async()=>{try{const t=await navigator.clipboard.readText();$('url').value=t;setVid(t)}catch(e){$('vidInfo').textContent='Автовставка недоступна: нажми и удерживай поле, выбери «Вставить».';$('url').focus()}});
+$('clearBtn').addEventListener('click',()=>{$('url').value='';VID=null;$('vidInfo').textContent=''});
+$('searchBtn').addEventListener('click',()=>{const q=$('search').value.trim();if(!q){$('search').focus();return}window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(q),'_blank','noopener')});
+$('search').addEventListener('keydown',e=>{if(e.key==='Enter')$('searchBtn').click()});
+$('stopAll').addEventListener('click',stopAll);
+
+/* настройки */
+['trSel','ttsSel','rateSel','volSel'].forEach(id=>{const v=store.get('mvt_'+id,null);if(v)$(id).value=v;$(id).addEventListener('change',()=>store.set('mvt_'+id,$(id).value))});
+
+/* диагностика компонентов */
+const DIAG=[];
+function addDiag(name,fn){
+  const r=el('div',{class:'r',text:'не проверялось'});
+  const run=async()=>{unlock();r.style.color='';r.textContent='проверяю…';try{const x=await fn();r.style.color='var(--ok)';r.textContent='✓ '+x;return true}catch(e){r.style.color='var(--bad)';r.textContent='✗ '+why(e);return false}};
+  DIAG.push(run);
+  $('diag').append(el('div',{class:'diag'},el('div',{text:name}),el('button',{class:'secondary small',text:'Проверить',onclick:run}),r));
+}
+Object.keys(TRN).forEach(k=>addDiag('Перевод: '+TRN[k],async()=>{const x=await TR[k]('Hello, how are you today? This is a test.');return x.trim()}));
+const SAY='Привет! Это проверка русского голоса.';
+addDiag('Голос: устройство (Web Speech)',async()=>{stopAll();const tok=++TOK;await speakWeb(SAY);return 'говорит'+(ruVoice()?' · '+ruVoice().name:'')});
+['google','se_maxim','se_tatyana'].forEach(k=>addDiag('Голос: '+TTSN[k],async()=>{stopAll();await speakUrl(ttsUrl(k,SAY));return 'говорит'}));
+$('diagAll').addEventListener('click',async()=>{for(const f of DIAG){await f()}});
+
+/* автотест */
+$('autoTest').addEventListener('click',async()=>{
+  const st=$('autoStatus');
+  try{need()}catch(e){st.textContent=e.message;return}
+  unlock();
+  const list=METHODS.filter(m=>m.probe);
+  let i=0;
+  for(const m of list){
+    i++;st.textContent='Проверяю '+i+' из '+list.length+': способ '+m.n+'…';
+    AUTO[m.n]='проверяю…';paint();
+    try{AUTO[m.n]='✓ '+await m.probe()}catch(e){AUTO[m.n]='✗ '+why(e).slice(0,90)}
+    paint();
+  }
+  st.textContent='Автотест завершён. Результат виден на каждой карточке и в итогах.';
+});
+$('copyRep').addEventListener('click',async()=>{
+  const lines=METHODS.map(m=>m.n+'. '+m.title+' — '+(RES[m.n]==='ok'?'РАБОТАЕТ':RES[m.n]==='bad'?'НЕ РАБОТАЕТ':'не проверен')+(AUTO[m.n]?' ['+AUTO[m.n]+']':''));
+  const txt='Отчёт MILLIONER VIDEO TRANSLATOR\n'+lines.join('\n');
+  try{await navigator.clipboard.writeText(txt);$('autoStatus').textContent='Отчёт скопирован. Вставь его в чат.'}catch(e){$('autoStatus').textContent='Скопировать не удалось: выдели итоги вручную.'}
+});
+
+buildCards();renderHistory();
+</script>
+</body>
+</html>
